@@ -3,6 +3,7 @@ package com.aldemir.listadapter.features.main.view
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,6 +13,9 @@ import com.aldemir.listadapter.R
 import com.aldemir.listadapter.data.Task
 import com.aldemir.listadapter.databinding.ActivityScrollingBinding
 import com.aldemir.listadapter.features.main.viewmodel.MainViewModel
+import com.aldemir.listadapter.utils.Constants
+import com.aldemir.listadapter.utils.Resource
+import com.aldemir.listadapter.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,12 +52,9 @@ class MainActivity : AppCompatActivity(), MyAdapter.ClickListener {
     }
 
     private fun insertTask() {
-        val task = Task()
-        if (binding.edtName.text.toString().isNotEmpty()) {
-            task.description = binding.edtName.text.toString()
-            binding.edtName.setText("")
-            viewModel.insertTask(task = task)
-        }
+        val taskDescription = binding.edtName.text.toString()
+        viewModel.insertTaskStatus(taskDescription)
+        binding.edtName.setText("")
 
     }
 
@@ -64,6 +65,26 @@ class MainActivity : AppCompatActivity(), MyAdapter.ClickListener {
             list.addAll(tasksSorted)
             Log.w(TAG, "Lista Ordenada: ${list.size}")
             adapter.submitList(list)
+        })
+
+        viewModel.insertTaskStatus.observe(this, Observer { tasks ->
+            when (tasks.getContentIfNotHandled()?.status) {
+                Status.SUCCESS -> {
+                    Toast.makeText(this,
+                        "Task inserted with success",
+                        Toast.LENGTH_SHORT).show()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this,
+                        "${tasks.peekContent().message}",
+                        Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(this,
+                        "${tasks.peekContent().message}",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
         })
     }
 

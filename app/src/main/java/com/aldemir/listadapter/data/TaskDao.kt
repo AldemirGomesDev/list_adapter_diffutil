@@ -9,8 +9,8 @@ interface TaskDao {
     fun getAll(): LiveData<List<Task>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: Task)
+    fun insert(user: Task): Long
 
     @Delete
-    fun delete(user: Task)
+    fun delete(user: Task): Int
 }

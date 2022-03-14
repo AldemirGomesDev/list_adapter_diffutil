@@ -12,16 +12,12 @@ class TaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ): TaskRepository {
 
-    override fun insert(task: Task) {
-        CoroutineScope(Dispatchers.IO).launch {
-            taskDao.insert(task)
-        }
+    override fun insert(task: Task): Long {
+        return taskDao.insert(task)
     }
 
-    override fun delete(task: Task) {
-        CoroutineScope(Dispatchers.IO).launch {
-            taskDao.delete(task)
-        }
+    override fun delete(task: Task): Int {
+        return taskDao.delete(task)
     }
 
     override fun getAllTasks(): LiveData<List<Task>> {

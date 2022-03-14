@@ -90,4 +90,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="message_error">Insert task error</string>
+    <string name="message_success">Insert task success</string>
 </resources>
